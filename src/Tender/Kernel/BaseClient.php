@@ -25,8 +25,11 @@ class BaseClient extends Client
     public function httpGet(string $url, array $query = [])
     {
         try {
-            $this->setHeaders($url, [], $query);
+            $res = $this->setHeaders($url, [], $query);
             unset($this->headers['Content-Type']);
+            if ($res !== true) {
+                return $res;
+            }
             return $this->request($url, 'GET', ['query' => $query, RequestOptions::HEADERS => $this->headers]);
         } catch (\Nebula\NebulaResponse\Kernel\Exceptions\InvalidConfigException|\GuzzleHttp\Exception\GuzzleException $e) {
             return ['code' => 100, 'message' => $e->getMessage()];
@@ -43,7 +46,10 @@ class BaseClient extends Client
     public function httpPostJson(string $url, array $data = [], array $query = [])
     {
         try {
-            $this->setHeaders($url, $data, $query);
+            $res = $this->setHeaders($url, $data, $query);
+            if ($res !== true) {
+                return $res;
+            }
             return $this->request($url, 'POST', ['query' => $query, 'json' => $data, RequestOptions::HEADERS => $this->headers]);
         } catch (\Nebula\NebulaResponse\Kernel\Exceptions\InvalidConfigException|\GuzzleHttp\Exception\GuzzleException $e) {
             return ['code' => 100, 'message' => $e->getMessage()];
@@ -76,5 +82,6 @@ class BaseClient extends Client
 
         $this->headers['X-sign']        = $sgin;
         $this->headers['Authorization'] = $token;
+        return true;
     }
 }
