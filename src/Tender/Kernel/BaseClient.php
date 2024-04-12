@@ -74,8 +74,9 @@ class BaseClient extends Client
             }
             $token = $result['data']['token'];
             list($header, $payload, $s) = explode('.', $token);
+
             $payload = json_decode(base64_decode($payload), true);
-            $this->app->cache->set($token_key, $token, $payload['exp'] - $payload['iat'] - 10);
+            $this->app->cache->set($token_key, $token, $payload['exp'] -time() - 10);
         }
         $sub  = Jwt::makeSub($url, $data, $query);
         $sgin = Jwt::makeSign($this->app->config->get('secret'), $sub, $this->app->config->get('expire', 10));
