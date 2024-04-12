@@ -18,5 +18,11 @@
   "require": {
     "nebula/nebula-response": "v1.0.4",
     "firebase/php-jwt": "v6.4.0"
-  }
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/nebula-plugins-response/nebula-response.git"
+    }
+  ]
 }
